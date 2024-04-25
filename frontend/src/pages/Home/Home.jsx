@@ -14,7 +14,7 @@ const Home = () => {
 
 
   function startRegister(){
-    navigate("/register");
+    navigate("/authenticate");
   }
 
   return (
@@ -23,12 +23,12 @@ const Home = () => {
         <p className={styles.text}>ready for everyone! While we wrap up the finishing youches, we’re adding people gradually to make sure nothing breaks :)</p>
 
         <div>
-         <Button onClick ={startRegister} text="Get your Username"/>
+         <Button onClick ={startRegister} text="Lets Go"/>
         </div>
 
       <div className={styles.signinWrapper}>
           <span className={styles.hasInvite}> Have an Invite text?</span>
-          <Link style={signInLinkStyle}to="/login"> Sign In </Link>
+         
         </div>
 
 
