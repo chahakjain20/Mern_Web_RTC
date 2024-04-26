@@ -1,19 +1,22 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Card from '../../../../components/shared/Card/Card'
 import Button from '../../../../components/shared/Button/Button'
-const Email = () => {
+import TextInput from '../../../../components/shared/TextInput/TextInput'
+import styles from '../StepPhoneEmail.module.css'
+const Email = ({onNext}) => {
+  const [email, setEmail] = useState('');
   return (
     <Card title="Enter you Email Id" icon="Email">
-        
+      <TextInput value={email} onChange={(e) => setEmail(e.target.value)} />
 
-        <div>
-         <Button  text="Next"/>
+      <div>
+        <div className={styles.actionButtonWrap}>
+          <Button text="Next" onClick={onNext} />
         </div>
-
-
-
-      </Card>
+        <p className={styles.bottomParagraph}>By entering your number, you’re agreeing to our Terms of Service and Privacy Policy. Thanks!</p>
+      </div>
+    </Card>
   )
 }
 
-export default Email
+export default Email;

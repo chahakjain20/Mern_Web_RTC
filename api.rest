@@ -1,0 +1,18 @@
+POST http://localhost:5500/api/send-otp HTTP/1.1
+Content-Type: application/json
+
+{
+    "phone":"+91 86199 54592"
+}
+
+###
+
+POST http://localhost:5500/api/verify-otp HTTP/1.1
+Content-Type: application/json
+
+{
+    "phone":"+91 86199 54592",
+    "otp":1289,
+    "hash":"ca212c20d952e83975ee1f959dde6ea3a99ba205d83a8f2cb84f6134c57809b5.1714133887001"
+
+}

@@ -12,10 +12,13 @@ const Authenticate = () => {
     const Step = steps[step];
 
     function onNext() {
-        setStep(step + 1);
-    }
+        setStep(step +1);
+       
+    };
+    console.log(step);
 
     return <Step onNext={onNext} />;
 };
+
 
 export default Authenticate;
