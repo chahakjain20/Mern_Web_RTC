@@ -5,32 +5,31 @@ import Home from './pages/Home/Home';
 import Navigation from './components/shared/Navigation/Navigation';
 import Authenticate from './pages/authenticate/Authenticate';
 import Activate from './pages/activate/Activate';
-
-// import Activate from './pages/Activate/Activate';
 import Rooms from './pages/Rooms/Rooms';
-// import Room from './pages/Room/Room';
 import { useSelector } from 'react-redux';
-// import { useLoadingWithRefresh } from './hooks/useLoadingWithRefresh';
-// import Loader from './components/shared/Loader/Loader';
 
 
-const isAuth = false;
-const user = {
-  activated: false,
-}
+
+// const isAuth = false;
+// const user = {
+//   activated: false,
+// }
 
 const GuestRoute = () => {
+  const {isAuth} = useSelector((state)=>state.auth);
   return (
     isAuth ? <Navigate to='/rooms' /> : <Outlet />
   )
 };
 const SemiProtectedRoute = () => {
+  const {user,isAuth} = useSelector((state)=>state.auth);
   return (
     !isAuth ? <Navigate to='/' /> : (isAuth && !user.activated ? <Outlet /> : <Navigate to='/rooms' />)
   )
 };
 
 const ProtectedRoute = () => {
+  const {user,isAuth} = useSelector((state)=>state.auth);
   return (
     !isAuth ? <Navigate to='/' /> : (isAuth && !user.activated ? <Navigate to='/activate' /> : <Outlet />)
   )

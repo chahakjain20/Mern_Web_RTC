@@ -2,7 +2,7 @@ const otpService = require('../services/otp-service');
 const hashService = require('../services/hash-service');
 const userService = require('../services/user-service');
 const tokenService = require('../services/token-service');
-
+const UserDto = require('../dtos/user-dtos')
 
 class AuthController {
     async sendOtp(req, res) {
@@ -25,11 +25,12 @@ class AuthController {
 
         //sent otp
         try {
-            await otpService.sendBySms(phone, otp);
+            //await otpService.sendBySms(phone, otp);
             res.json({
                 hash: `${hash}.${expires}`,
                 phone,
-            })
+                otp
+            });
 
         } catch (error) {
             console.log(error);
@@ -90,7 +91,8 @@ class AuthController {
             httpOnly: true
         });
 
-        res.json({ accessToken });
+        const userDto = new UserDto(user);
+        res.json({ accessToken ,user:userDto});
 
 
     }
