@@ -89,12 +89,12 @@ class AuthController {
         // storing refresh token in db
          await tokenService.storeRefreshToken(refreshToken,user._id);
 
-        res.cookie('refreshtoken',refreshToken, {
+        res.cookie('refreshToken',refreshToken, {
             maxAge: 1000 * 60 * 60 * 24 * 30,
             httpOnly: true
         });
 
-        res.cookie('accesstoken',accessToken, {
+        res.cookie('accessToken',accessToken, {
             maxAge: 1000 * 60 * 60 * 24 * 30,
             httpOnly: true
         });
@@ -104,6 +104,76 @@ class AuthController {
         res.json({ user:userDto,auth:true});
 
 
+    }
+    async refresh(req,res){
+        //get refresh token from cookie/header
+        const {refreshToken: refreshTokenFromCookie} = req.cookies;
+
+        //check if token is valid 
+        let userData;
+        try {
+           userData = await tokenService.verifyRefreshToken(refreshTokenFromCookie);
+
+        } catch (error) {
+            return res.status(401).json({message:'Invalid Token'});
+
+        }
+        // is refresh token is in database or not 
+        try {
+            const token = await tokenService.findRefreshToken(
+                userData._id,
+                refreshTokenFromCookie
+            );
+            
+            if(!token){
+                return res.status(401).json({
+                    messagse:"invalid Token"
+                });
+            }
+        } catch (error) {
+            return res.status(500).json({
+                messagse:"internal Error"
+            })
+        }
+        //check if valid user
+        const user = userService.findUser({_id:userData._id});
+        if(!user){
+            return res.status(404).json({
+                messagse:"User not found"
+            });
+
+        }
+        //generate new tokens - access and refresh
+        const {refreshToken,accessToken} = tokenService.generateTokens({
+            _id:userData._id,
+
+        });
+
+        //update refresh token
+        try {
+           await tokenService.updateRefreshToken(userData._id,refreshToken);
+        } catch (error) {
+            return res.status(500).json({
+                messagse:"internal Error"
+            })
+            
+        }
+         // cookie ke andar daalo 
+         
+        res.cookie('refreshToken',refreshToken, {
+            maxAge: 1000 * 60 * 60 * 24 * 30,
+            httpOnly: true
+        });
+
+        res.cookie('accessToken',accessToken, {
+            maxAge: 1000 * 60 * 60 * 24 * 30,
+            httpOnly: true
+        });
+
+        //response
+        const userDto = new UserDto(user);
+        res.json({ user:userDto,auth:true});
+         
     }
 
 }

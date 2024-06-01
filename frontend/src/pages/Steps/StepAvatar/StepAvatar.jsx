@@ -4,31 +4,39 @@ import Card from '../../../components/shared/Card/Card'
 import styles from './StepAvatar.module.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { setAvatar } from '../../../store/activateSlice'
+import { activate } from '../../../http'
+import {setAuth} from '../../../store/authSlice'
 
 const StepAvatar = ({onNext}) => {
   const dispatch = useDispatch();
-  const {name} = useSelector((state)=>state.activate);
+  const {name,avatar} = useSelector((state)=>state.activate);
 
   const [image,setImage] = useState('/images/monkey.png');
 
-  function captureImage(e){
-
+  function captureImage(e) {
     const file = e.target.files[0];
     const reader = new FileReader();
-
     reader.readAsDataURL(file);
-
-    reader.onloadend = function(){
-
-      console.log(reader.result);
+    reader.onloadend = function () {
+      // console.log(reader.result);
       setImage(reader.result);
       dispatch(setAvatar(reader.result));
-
-    }
+    };
     
-  }
-  function submit(){
-
+}
+  async function submit(){
+    try {
+      const { data } = await activate({ name, avatar });
+      if (data.auth) {
+       
+            dispatch(setAuth(data));
+        
+    }
+      console.log(data);
+      
+    } catch (error) {
+      console.log(error);
+    }
   }
   return (
     <>
