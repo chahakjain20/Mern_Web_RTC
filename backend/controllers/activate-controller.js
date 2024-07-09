@@ -10,6 +10,7 @@ class ActivateController {
         if (!name || !avatar) {
             res.status(400).json({ message: 'All fields are required!' });
         }
+        
 
         //Image Base64
         const buffer = Buffer.from(
@@ -40,8 +41,10 @@ class ActivateController {
             user.activated = true;
             user.name = name;
             user.avatar = `/storage/${imagePath}`;
-            user.save();
+            await user.save();
+            console.log(user);
             res.json({ user: new UserDto(user), auth: true });
+
         } catch (err) {
             res.status(500).json({ message: 'Something went wrong!' });
         }

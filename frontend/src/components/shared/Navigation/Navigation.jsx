@@ -49,9 +49,9 @@ const Navigation = () => {
             src={user.avatar} width = "40" height ="40" alt="Avatar" />
 
         </Link>
-        <button className={styles.logoutButton} onClick={logoutUser}>
+       { isAuth && <button className={styles.logoutButton} onClick={logoutUser}>
             <img src="/images/logout.png" width = "20" height ="20" alt="logout" />
-        </button>
+        </button>}
 
     </div>
     {/* {isAuth && <button onClick={logoutUser}>Logout</button>} */}
